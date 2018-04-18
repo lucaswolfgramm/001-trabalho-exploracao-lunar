@@ -3,6 +3,7 @@ package graph;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class leituraArquivo {
@@ -10,12 +11,14 @@ public class leituraArquivo {
 	public static void main(String[] args) {
 		Scanner ler = new Scanner(System.in);
 		int tamanhoMatriz = 0, cont = 0;
-		String[][] matriz;
+		String[][] matriz = null;
 		String letra = "";
 
 		System.out.printf("Informe o nome de arquivo texto:\n");
-		String nome = ler.nextLine();
-
+		//String nome = ler.nextLine();
+		String nome = "c:/teste.txt";
+		Graph<Integer> graph = new Graph<>();
+		
 		System.out.printf("\nConteúdo do arquivo texto:\n");
 		try {
 			FileReader arq = new FileReader(nome);
@@ -25,7 +28,7 @@ public class leituraArquivo {
 			// a variável "linha" recebe o valor "null" quando o processo
 			// de repetição atingir o final do arquivo texto
 			while (linha != null) {
-				Graph<Integer> graph = new Graph<>();
+				
 				
 
 				linha = linha.replaceAll(" ", "");
@@ -34,9 +37,10 @@ public class leituraArquivo {
 					tamanhoMatriz = Integer.parseInt(linha); // armazena o tamanho da matriz
 					System.out.println("\nMatriz tamanho = " + tamanhoMatriz);
 					System.out.println();
+					matriz = new String[tamanhoMatriz][tamanhoMatriz];
 				}
 
-				matriz = new String[tamanhoMatriz][tamanhoMatriz];
+				
 
 				if (linha.length() != 1 && linha.length() != 2 && linha.length() != 0) { 
 				//entra somente se nao é o tamanho da matriz e linha em branco
@@ -55,29 +59,61 @@ public class leituraArquivo {
 					}
 				}
 				
-				for (int line = 0; line < matriz.length; line++) {
-					for (int column = 0; column < matriz.length; column++) {
-						if(matriz[line][column] != "*" && matriz[line][column] != ".") {
-							
-							for (int i = 0; i < matriz[line].length; i++) {
-								if(matriz[line][i] == ".") {
-									//String one matriz[line][column].valueOf(0); 
-									Vertex<Integer> one = graph.addVertex(0); // GUARDA O ELEMENTO ENCOTRADO
-									Vertex<Integer> two = matriz[line][i];
-									one.addEdge(two, 20); //FAZ A LIGAÇÃO DE UMA ELEMENTO COM OUTRO
-								}
-							}
-							
-							
-						}
-					}
-				}
+				
 
 				if (linha.length() == 2) {
 					String inicio = String.valueOf(linha.charAt(0));
 					String fim = String.valueOf(linha.charAt(1));
 					System.out.println("Caminho do = " + inicio + " até = " + fim);
 				}
+				
+				
+				if (linha.length() == 0) {
+					
+					ArrayList<Vertex> listaVertices = new ArrayList<Vertex>();
+					
+					
+					for (int line = 0; line < matriz.length; line++) {
+						for (int column = 0; column < matriz.length; column++) {
+							if(matriz[line][column] != null && !matriz[line][column].equals("*") && !matriz[line][column].equals(".")) {
+								
+								Vertex<Integer> novo = graph.addVertex(Integer.parseInt(matriz[line][column]));
+								listaVertices.add(novo);
+								
+								/*for (int i = 0; i < matriz[line].length; i++) {
+									if(matriz[line][i] == ".") {
+										//String one matriz[line][column].valueOf(0); 
+										Vertex<Integer> one = graph.addVertex(0); // GUARDA O ELEMENTO ENCOTRADO
+										Vertex<Integer> two = matriz[line][i];
+										one.addEdge(two, 20); //FAZ A LIGAÇÃO DE UMA ELEMENTO COM OUTRO
+									}
+								}*/
+								
+								
+							}
+						}
+					}
+					System.out.println("Terminei de criar os vertices");
+					
+					for (int line = 0; line < matriz.length; line++) {
+						for (int column = 0; column < matriz.length; column++) {
+							if(matriz[line][column] != null && !matriz[line][column].equals("*") && matriz[line][column].equals(".")) {
+								
+								
+								Vertex<Integer> verticenaposicao = listaVertices.get(line);
+								
+								
+							}
+						}
+					}
+					
+					
+					
+					
+				}
+				
+				
+				
 
 				linha = lerArq.readLine(); // lê da segunda até a última linha
 			}
@@ -86,6 +122,11 @@ public class leituraArquivo {
 		} catch (IOException e) {
 			System.err.printf("Erro na abertura do arquivo: %s.\n", e.getMessage());
 		}
+		
+		
+		
+		
+		
 
 		System.out.println();
 	}
